@@ -43,9 +43,15 @@ function __pvm_install {
 
   if ! __pvm_check_requirements; then
     echo "Missing Dependency"
-  else
-    [[ $VALID_PHPS =~ $1 ]] && echo "Install: $1" || echo "Unsupported PHP version"
+    return 1
   fi
+
+  if [ ! $VALID_PHPS =~ $1 ]; then
+    echo "Unsupported PHP version"
+    return 1
+  fi
+
+  echo "Install: $1"
 
 }
 
