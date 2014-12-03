@@ -11,6 +11,10 @@ function pvm {
       __pvm_update
       ;;
 
+    install)
+      __pvm_install $2
+      ;;
+
     *)
       __pvm_usage
       ;;
@@ -32,4 +36,9 @@ function __pvm_update {
   mkdir -p "$PVM_PHPS"
 
   cp $PVM_SOURCE $PVM_HOME/pvm.sh
+}
+
+function __pvm_install {
+  local VALID_PHPS="5 5.1 5.2 5.3 5.4 5.5 5.6"
+  [[ $VALID_PHPS =~ $1 ]] && echo "Install: $1" || echo "Unsupported PHP version"
 }
