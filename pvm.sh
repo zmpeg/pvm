@@ -1,12 +1,14 @@
 
+export PVM_HOME="$HOME/.pvm"
+export PVM_PHPS="$PVM_HOME/phps"
+export PVM_SOURCE="/home/matt/projects/pvm/pvm.sh"
+
 function pvm {
-  local PVMHOME="$HOME/.pvm"
-  local PHPS="$PVMHOME/phps"
 
   case "$1" in
 
     update)
-      __pvm_install
+      __pvm_update
       ;;
 
     *)
@@ -25,6 +27,9 @@ function __pvm_usage {
   "
 }
 
-function __pvm_install {
-  echo "install..."
+function __pvm_update {
+  mkdir -p "$PVM_HOME"
+  mkdir -p "$PVM_PHPS"
+
+  cp $PVM_SOURCE $PVM_HOME/pvm.sh
 }
