@@ -62,11 +62,18 @@ function __pvm_install {
     if [ ! `echo $INSTALL_VERSION | wc -l` == 1 ]; then
       INSTALL_VERSION=`echo $INSTALL_VERSION | grep -v RC | head -n 1`
     fi
-    
+
   fi
 
-  echo "Install: $INSTALL_VERSION"
-  # curl "https://github.com/php/php-src/archive/php-5.6.3.zip" | unzip
+  echo "Downloading: $INSTALL_VERSION"
+  rm -rf "$PVM_TMP"
+  mkdir -p "$PVM_TMP"
+  curl -L "https://api.github.com/repos/php/php-src/zipball/$INSTALL_VERSION" -o "$PVM_TMP/$INSTALL_VERSION.zip"
+  unzip -d $PVM_TMP "$PVM_TMP/$INSTALL_VERSION.zip" > /dev/null
+  rm "$PVM_TMP/$INSTALL_VERSION.zip"
+  PVM_COMPILE_DIR=$(ls $PVM_TMP)
+  
+  echo $PVM_COMPILE_DIR
 
 }
 
