@@ -2,6 +2,8 @@
 export PVM_HOME="$HOME/.pvm"
 export PVM_PHPS="$PVM_HOME/phps"
 export PVM_SOURCE="/home/matt/projects/pvm/pvm.sh"
+export PVM_PHP_GIT="https://github.com/php/php-src.git"
+export PVM_TMP="$PVM_HOME/.tmp"
 
 function pvm {
 
@@ -34,24 +36,27 @@ function __pvm_usage {
 function __pvm_update {
   mkdir -p "$PVM_HOME"
   mkdir -p "$PVM_PHPS"
+  mkdir -p "$PVM_TMP"
 
   cp $PVM_SOURCE $PVM_HOME/pvm.sh
 }
 
 function __pvm_install {
-  local VALID_PHPS="5 5.1 5.2 5.3 5.4 5.5 5.6"
+  ## Rely on php always starting versions with php-
+  VALID_PHPS=`curl -s "https://api.github.com/repos/php/php-src/tags" | grep -Po '"name":.*?[^\\\\]",' | awk '{ print $2 }' | sed -e 's/^"//'  -e 's/",$//' | grep -P php\- | tr '\n' ' '`
 
   if ! __pvm_check_requirements; then
     echo "Missing Dependency"
     return 1
   fi
 
-  if [ ! $VALID_PHPS =~ $1 ]; then
-    echo "Unsupported PHP version"
+  if [ ! "$VALID_PHPS" =~ $1 ]; then
+    echo "Unsupported PHP version. Please specify: $VALID_PHPS"
     return 1
   fi
 
   echo "Install: $1"
+  # curl "https://github.com/php/php-src/archive/php-5.6.3.zip" | unzip
 
 }
 
