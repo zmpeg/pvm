@@ -53,9 +53,19 @@ function __pvm_install {
   if [ ! "$VALID_PHPS" =~ $1 ]; then
     echo "Unsupported PHP version. Please specify: $VALID_PHPS"
     return 1
+  else
+
+    # find the specified version from the list
+    INSTALL_VERSION=`echo $VALID_PHPS | tr ' ' '\n' | grep $1`
+
+    # if more than one version, grab the latest non-rc version
+    if [ ! `echo $INSTALL_VERSION | wc -l` == 1 ]; then
+      INSTALL_VERSION=`echo $INSTALL_VERSION | grep -v RC | head -n 1`
+    fi
+    
   fi
 
-  echo "Install: $1"
+  echo "Install: $INSTALL_VERSION"
   # curl "https://github.com/php/php-src/archive/php-5.6.3.zip" | unzip
 
 }
