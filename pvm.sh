@@ -28,8 +28,9 @@ function __pvm_usage {
     Usage: pvm <command>
 
     Commands:
-      usage      show this help screen
-      update    install or update pvm
+      usage                show this help screen
+      update               install or update pvm
+      install <version>    install specified php, ex: 5, 5.5, 5.6,3
   "
 }
 
