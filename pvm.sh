@@ -72,8 +72,12 @@ function __pvm_install {
   unzip -d $PVM_TMP "$PVM_TMP/$INSTALL_VERSION.zip" > /dev/null
   rm "$PVM_TMP/$INSTALL_VERSION.zip"
   PVM_COMPILE_DIR=$(ls $PVM_TMP)
+  PVM_COMPILE_DIR="$PVM_TMP/$PVM_COMPILE_DIR"
+  PVM_INSTALL_PREFIX="$PVM_PHPS/$INSTALL_VERSION"
   
-  echo $PVM_COMPILE_DIR
+  __pvm_build_php $PVM_COMPILE_DIR $PVM_INSTALL_PREFIX
+
+  rm -rf $PVM_COMPILE_DIR
 
 }
 
@@ -85,4 +89,19 @@ function __pvm_check_requirements {
     [[ $? == '1' ]] && return 1
   done
   return 0
+}
+
+function __pvm_build_php {
+  ORIG_DIR=`pwd`
+  cd $1
+  ./buildconf  --force
+  __pvm_fix_bison $1
+  ./configure --prefix=$2
+  make
+  make install
+  cd $ORIG_DIR
+}
+
+function __pvm_fix_bison {
+  sed -i "s/bison_version_exclude=\"3.0\"/bison_version_exclude=\"none\"/" configure
 }
